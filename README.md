@@ -7,6 +7,7 @@ This is a simple TODO app designed to demonstrate a **Flask** application. The a
 You can access each version of the code by clicking on the title, and then follow the instructions in the README file:
 
 - [Add simple Dockerfile for backend Flask app (Lesson 1)](https://github.com/TheSaharFarahzad/todo-app-medium/tree/lesson-1)
+- [Multi-Stage Docker Build for Flask App (Lesson 2)](https://github.com/TheSaharFarahzad/todo-app-medium/tree/lesson-2)
 
 ## Setup Instructions
 
