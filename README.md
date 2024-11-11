@@ -1,6 +1,6 @@
 # Simple Flask TODO App with Docker
 This is a simple TODO app designed to demonstrate a **Flask** application. The app serves as a basic TODO list API, and it is used to learn **Docker** step by step through this Medium article:
-[https://medium.com/CodeWithSahar/Docker](https://medium.com/CodeWithSahar/)
+[https://medium.com/@CodeWithSahar/](https://medium.com/@CodeWithSahar/)
 
 ## Code Versions
 
