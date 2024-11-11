@@ -1,17 +1,36 @@
-# Use an official Python runtime as the base image
-FROM python:3.12-slim
+# Build Stage
+FROM python:3.12-slim as builder
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy the current directory contents into the /app directory in the container
-COPY . /app
+# Copy the requirements.txt into the image
+COPY requirements.txt ./
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies and build wheel files
+RUN pip install --upgrade pip && \
+    pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
 
-# Expose port 8000 (if your app uses this port)
+# Runner Stage
+FROM python:3.12-slim as runner
+
+# Set working directory
+WORKDIR /app
+
+# Copy wheel files from the build stage
+COPY --from=builder /wheels /wheels
+
+# Install packages from wheel files
+RUN pip install --no-cache-dir /wheels/*
+
+# Copy Flask application
+COPY app.py /app
+
+# Set Flask environment variable
+ENV FLASK_APP=app.py
+
+# Expose port 8000 for the application
 EXPOSE 8000
 
-# Define the default command to run the application
+# Start the application
 CMD ["flask", "run", "--host=0.0.0.0", "--port=8000"]
