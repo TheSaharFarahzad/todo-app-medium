@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+</head>
+
+<body>
+    <h1>To-Do Application</h1>
+    <input type="text" id="todo-input" placeholder="Enter a new task">
+    <button onclick="addTodo()">Add Task</button>
+
+    <h2>Pending Tasks</h2>
+    <ul id="todo-list"></ul>
+
+    <h2>Completed Tasks</h2>
+    <ul id="completed-list"></ul>
+
+    <script>
+        const API_URL = 'http://localhost:8000/tasks'; // Define the base API URL
+
+        // Function to fetch and display to-dos from the backend
+        function fetchTodos() {
+            fetch(API_URL) // Using defined API URL
+                .then(response => response.json())
+                .then(data => {
+                    const todoList = document.getElementById('todo-list');
+                    const completedList = document.getElementById('completed-list');
+                    todoList.innerHTML = '';
+                    completedList.innerHTML = '';
+
+                    data.forEach((todo) => {
+                        const li = document.createElement('li');
+                        li.textContent = todo.title;
+
+                        // Edit button to update task title
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'Edit';
+                        editButton.onclick = () => editTask(todo.id, todo.title);
+
+                        if (todo.done) {
+                            // "Undone" button for completed tasks
+                            const undoneButton = document.createElement('button');
+                            undoneButton.textContent = 'Undone';
+                            undoneButton.onclick = () => markAsUndone(todo.id);
+
+                            li.appendChild(undoneButton);
+                            completedList.appendChild(li);
+                        } else {
+                            // "Done" button for incomplete tasks
+                            const doneButton = document.createElement('button');
+                            doneButton.textContent = 'Done';
+                            doneButton.onclick = () => markAsDone(todo.id);
+
+                            li.appendChild(doneButton);
+                            todoList.appendChild(li);
+                        }
+
+                        li.appendChild(editButton);
+
+                        // Delete button for both lists
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.onclick = () => deleteTodo(todo.id);
+                        li.appendChild(deleteButton);
+                    });
+                });
+        }
+
+        // Function to add a new to-do
+        function addTodo() {
+            const taskTitle = document.getElementById('todo-input').value;
+            if (taskTitle) {
+                fetch(API_URL, {  // Using the defined API URL
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title: taskTitle })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        fetchTodos();  // Refresh the list after adding a new task
+                    });
+            }
+        }
+
+        // Function to delete a to-do
+        function deleteTodo(id) {
+            fetch(`${API_URL}/${id}`, {  // Using the defined API URL
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    fetchTodos();  // Refresh the list after deleting a task
+                });
+        }
+
+        // Function to mark a to-do as done
+        function markAsDone(id) {
+            fetch(`${API_URL}/${id}`, {  // Using the defined API URL
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ done: true })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    fetchTodos();  // Refresh the list after marking as done
+                });
+        }
+
+        // Function to mark a to-do as undone
+        function markAsUndone(id) {
+            fetch(`${API_URL}/${id}`, {  // Using the defined API URL
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ done: false })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    fetchTodos();  // Refresh the list after marking as undone
+                });
+        }
+
+        // Function to edit a to-do title
+        function editTask(id, currentTitle) {
+            const newTitle = prompt("Edit Task Title:", currentTitle);
+            if (newTitle) {
+                fetch(`${API_URL}/${id}`, {  // Using the defined API URL
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title: newTitle })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        fetchTodos();  // Refresh the list after editing a task
+                    });
+            }
+        }
+
+        // Initial fetch of to-dos when the page loads
+        fetchTodos();
+    </script>
+</body>
+
+</html>
