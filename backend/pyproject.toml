@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mysite"
+requires-python = ">=3.12"
+version = "0.0.1"
+dependencies = [
+    "Flask==3.0.3",
+    "flask-cors==4.0.0",
+    "motor==2.5.0",
+    "pydantic==1.9.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["backend"]

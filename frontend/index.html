@@ -38,13 +38,13 @@
                         // Edit button to update task title
                         const editButton = document.createElement('button');
                         editButton.textContent = 'Edit';
-                        editButton.onclick = () => editTask(todo.id, todo.title);
+                        editButton.onclick = () => editTask(todo._id, todo.title);
 
                         if (todo.done) {
                             // "Undone" button for completed tasks
                             const undoneButton = document.createElement('button');
                             undoneButton.textContent = 'Undone';
-                            undoneButton.onclick = () => markAsUndone(todo.id);
+                            undoneButton.onclick = () => markAsUndone(todo._id);
 
                             li.appendChild(undoneButton);
                             completedList.appendChild(li);
@@ -52,7 +52,7 @@
                             // "Done" button for incomplete tasks
                             const doneButton = document.createElement('button');
                             doneButton.textContent = 'Done';
-                            doneButton.onclick = () => markAsDone(todo.id);
+                            doneButton.onclick = () => markAsDone(todo._id);
 
                             li.appendChild(doneButton);
                             todoList.appendChild(li);
@@ -63,7 +63,7 @@
                         // Delete button for both lists
                         const deleteButton = document.createElement('button');
                         deleteButton.textContent = 'Delete';
-                        deleteButton.onclick = () => deleteTodo(todo.id);
+                        deleteButton.onclick = () => deleteTodo(todo._id);
                         li.appendChild(deleteButton);
                     });
                 });

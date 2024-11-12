@@ -1,2 +1,11 @@
+# Flask: Micro web framework for building the backend API
 Flask==3.0.3
-flask-cors
+
+# flask-cors: Handles Cross-Origin Resource Sharing (CORS)
+flask-cors==4.0.0
+
+# motor: Async MongoDB driver for non-blocking DB operations
+motor==2.5.0
+
+# pydantic: Data validation and parsing for task models
+pydantic==1.9.0
